@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "58764826248",
+    "firebase_url": "https://events-logger.firebaseio.com",
+    "project_id": "events-logger",
+    "storage_bucket": "events-logger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58764826248:android:f60a821f243559b670713d",
+        "android_client_info": {
+          "package_name": "com.example.eventslogger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "58764826248-oreq6sn3g8k5iohpo4omsouh5cohso8d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eventslogger",
+            "certificate_hash": "8320f4425292464e1af26b53ed4492ca56f57c8f"
+          }
+        },
+        {
+          "client_id": "58764826248-m73966gu4pnaqhrtvhevs16rgoeel07i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAip28D5kCUlPdH0ynjZhTDXKZiWVMeXGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "58764826248-m73966gu4pnaqhrtvhevs16rgoeel07i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
