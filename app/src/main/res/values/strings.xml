@@ -2,4 +2,6 @@
     <string name="app_name">Events Logger</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="subtitle1">We are here to help you with your events logging to avoid using your memory</string>
+    <string name="get_started">GET STARTED</string>
 </resources>
