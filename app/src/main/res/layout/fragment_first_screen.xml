@@ -13,46 +13,59 @@
 
         <ImageView
             android:id="@+id/image_logo"
-            android:layout_width="179dp"
-            android:layout_height="104dp"
+            android:layout_width="199dp"
+            android:layout_height="131dp"
             android:src="@drawable/horselogo"
-            app:layout_constraintBottom_toTopOf="@+id/button_sign_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_logo" />
+
+        <TextView
+            android:id="@+id/text_logo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:capitalize="characters"
+            android:gravity="center"
+            android:text="Events Logger"
+            android:textColor="@color/colorAccent"
+            android:textSize="26sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/text_logo"
-            android:layout_width="179dp"
+            android:id="@+id/textViewEmail"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:capitalize="characters"
-            android:gravity="center"
-            android:text="Events Logger"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/image_logo"
-            app:layout_constraintStart_toStartOf="@+id/image_logo"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:text="Email or Username"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_logo" />
 
-        <Button
-            android:id="@+id/button_sign_up"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Sign Up"
-            app:layout_constraintBottom_toTopOf="@+id/button_login"
-            app:layout_constraintEnd_toEndOf="@+id/text_logo"
-            app:layout_constraintStart_toStartOf="@+id/text_logo"
-            app:layout_constraintTop_toBottomOf="@+id/image_logo" />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_edittext_states"
+            android:padding="5dp"
+            app:helperTextEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEmail">
 
-        <Button
-            android:id="@+id/button_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign In"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/button_sign_up"
-            app:layout_constraintStart_toStartOf="@+id/button_sign_up"
-            app:layout_constraintTop_toBottomOf="@+id/button_sign_up" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:drawableEnd="@drawable/ic_account_circle_black_24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Username" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
