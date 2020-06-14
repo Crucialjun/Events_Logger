@@ -11,6 +11,29 @@
         android:layout_height="match_parent">
 
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_edittext_states"
+            android:padding="5dp"
+            app:helperTextEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPassword">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_account_circle_black_24dp"
+                android:hint="Enter Password" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <ImageView
             android:id="@+id/image_logo"
             android:layout_width="199dp"
@@ -25,7 +48,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:capitalize="characters"
             android:gravity="center"
             android:text="Events Logger"
             android:textColor="@color/colorAccent"
@@ -48,10 +70,11 @@
             app:layout_constraintTop_toBottomOf="@+id/image_logo" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutUsername"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_edittext_states"
             android:padding="5dp"
             app:helperTextEnabled="false"
@@ -60,11 +83,66 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewEmail">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:drawableEnd="@drawable/ic_account_circle_black_24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_account_circle_black_24dp"
                 android:hint="Enter Username" />
+
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textViewPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="Password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUsername" />
+
+        <CheckBox
+            android:id="@+id/checkBoxRememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Remember Me"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="Forgot Password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="New User?"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Sign In"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
