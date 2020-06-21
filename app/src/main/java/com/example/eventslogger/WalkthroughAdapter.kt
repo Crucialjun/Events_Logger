@@ -3,8 +3,11 @@ package com.example.eventslogger
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.eventslogger.OnboardingFragments.OnboardingOne
+import com.example.eventslogger.OnboardingFragments.OnboardingThree
+import com.example.eventslogger.OnboardingFragments.OnboardingTwo
 
-class Walkthrough_Adapter(fm: FragmentManager, behavior: Int) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class WalkthroughAdapter(fm: FragmentManager, behavior: Int) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
 
 

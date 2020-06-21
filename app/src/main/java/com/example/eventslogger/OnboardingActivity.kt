@@ -18,9 +18,10 @@ class OnboardingActivity : AppCompatActivity() {
 
         if (!firstRun){
             startActivity(Intent(this,MainActivity::class.java))
+            finish()
         }
 
-        val adapterWalkthrough = Walkthrough_Adapter(supportFragmentManager,
+        val adapterWalkthrough = WalkthroughAdapter(supportFragmentManager,
             FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
 
         viewpager.adapter  = adapterWalkthrough
