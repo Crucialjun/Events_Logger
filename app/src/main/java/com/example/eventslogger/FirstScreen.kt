@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.eventslogger.R.id.action_firstScreen_to_signUp
 import kotlinx.android.synthetic.main.fragment_first_screen.*
@@ -31,5 +32,12 @@ class FirstScreen : Fragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        textViewNewUser.setOnClickListener {
+            it.findNavController().navigate(R.id.action_firstScreen_to_signUp)
+
+        }
+    }
 }
