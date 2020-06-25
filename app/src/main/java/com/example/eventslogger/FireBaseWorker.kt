@@ -2,6 +2,7 @@ package com.example.eventslogger
 
 import android.content.Context
 import android.widget.Toast
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -43,7 +44,7 @@ class FireBaseWorker(val context : Context?) {
 
     }
 
-    public fun sinin(email:String,password:String): Boolean {
+    public fun signIn(email:String, password:String): Boolean {
         var isSuccesful : Boolean = true
 
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
@@ -51,6 +52,10 @@ class FireBaseWorker(val context : Context?) {
         }
 
         return isSuccesful
+    }
+
+    public fun googleSignIn(){
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken()
     }
 
 
