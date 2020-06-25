@@ -13,21 +13,34 @@ class FireBaseWorker(val context : Context?) {
     private var userId : String = ""
     lateinit var  userReference : DatabaseReference
 
-    public fun signup(email:String,password : String){
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
-            if (it.isSuccessful){
-                userId = mAuth.currentUser!!.uid
-                userReference = FirebaseDatabase.getInstance().reference.child("Users").child(userId)
+    public fun signup(email:String,password : String): Boolean {
+        var isSuccesful : Boolean = true
 
-                val userHash = HashMap<String,Any>()
-                userHash["uid"] = userId
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    userId = mAuth.currentUser!!.uid
+                    userReference =
+                        FirebaseDatabase.getInstance().reference.child("Users").child(userId)
 
-                Toast.makeText(context,"Sign Up Succesfull",Toast.LENGTH_LONG).show()
+                    val userHash = HashMap<String, Any>()
+                    userHash["uid"] = userId
+                    userReference.updateChildren(userHash).addOnCompleteListener { task ->
+                        if(task.isSuccessful){
 
-            }else{
-                Toast.makeText(context,"Sign up unSuccesfull",Toast.LENGTH_LONG).show()
+                        }else{
+                            Toast.makeText(context,"Database Not Updated",Toast.LENGTH_LONG).show()
+                            isSuccesful = false
+                        }
+                    }
+
+
+                } else {
+                    Toast.makeText(context, "Sign up unSuccesfull because of ${it.exception}", Toast.LENGTH_LONG).show()
+                }
             }
-        }
+
+        return isSuccesful
+
     }
 
 

@@ -26,7 +26,10 @@
         tools:layout="@layout/fragment_sign_up" >
         <action
             android:id="@+id/action_signUp_to_eventsListFragment"
-            app:destination="@id/eventsListFragment" />
+            app:destination="@id/eventsListFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/eventsListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/eventsListFragment"
