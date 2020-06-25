@@ -17,7 +17,7 @@ class OnboardingActivity : AppCompatActivity() {
         val firstRun : Boolean = preference.getBoolean("firstRun",true)
 
         if (!firstRun){
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this,SignUpSignInActivity::class.java))
             finish()
         }
 
@@ -30,7 +30,7 @@ class OnboardingActivity : AppCompatActivity() {
         adapterWalkthrough.registerDataSetObserver(indicator.dataSetObserver)
 
         button_getstarted.setOnClickListener {
-            val intent : Intent = Intent(this,MainActivity::class.java);
+            val intent : Intent = Intent(this,SignUpSignInActivity::class.java);
             val editor : SharedPreferences.Editor = preference.edit()
             editor.putBoolean("firstRun",false)
             editor.apply()

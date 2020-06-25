@@ -1,5 +1,6 @@
 package com.example.eventslogger
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.eventslogger.R.id.action_firstScreen_to_signUp
 import kotlinx.android.synthetic.main.fragment_first_screen.*
+import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 
 class FirstScreen : Fragment() {
@@ -38,6 +40,20 @@ class FirstScreen : Fragment() {
         textViewNewUser.setOnClickListener {
             it.findNavController().navigate(R.id.action_firstScreen_to_signUp)
 
+        }
+
+        button_sign_in.setOnClickListener {
+            val email = sign_in_username.text.toString()
+            val password = sign_in_password.text.toString()
+            val successful = FireBaseWorker(context).sinin(email, password)
+            if(successful){
+                Toast.makeText(context, "Sign in Complete", Toast.LENGTH_SHORT).show()
+                val intent = Intent (activity,MainActivity::class.java)
+                requireActivity().startActivity(intent)
+                requireActivity().finish()
+            } else{
+                Toast.makeText(context, "Sign Up InComplete", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

@@ -15,25 +15,10 @@
             app:destination="@id/signUp"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_firstScreen_to_eventsListFragment"
-            app:destination="@id/eventsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUp"
         android:name="com.example.eventslogger.SignUp"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
-        <action
-            android:id="@+id/action_signUp_to_eventsListFragment"
-            app:destination="@id/eventsListFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/eventsListFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/eventsListFragment"
-        android:name="com.example.eventslogger.EventsListFragment"
-        android:label="fragment_events_list"
-        tools:layout="@layout/fragment_events_list" />
+        tools:layout="@layout/fragment_sign_up" />
 </navigation>

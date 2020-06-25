@@ -9,7 +9,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class FireBaseWorker(val context : Context?) {
-    private val mAuth : FirebaseAuth = FirebaseAuth.getInstance()
+    public val mAuth : FirebaseAuth = FirebaseAuth.getInstance()
     private var userId : String = ""
     lateinit var  userReference : DatabaseReference
 
@@ -42,6 +42,17 @@ class FireBaseWorker(val context : Context?) {
         return isSuccesful
 
     }
+
+    public fun sinin(email:String,password:String): Boolean {
+        var isSuccesful : Boolean = true
+
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
+            isSuccesful = it.isSuccessful
+        }
+
+        return isSuccesful
+    }
+
 
 
 
