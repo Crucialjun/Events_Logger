@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -12,12 +15,16 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.lang.Exception
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+
 
 class FireBaseWorker(val context : Context?) {
     public val mAuth : FirebaseAuth = FirebaseAuth.getInstance()
     private var userId : String = ""
     private lateinit var  userReference : DatabaseReference
-    val RC_SIGN_IN: Int = 1
 
     public fun signUp(email:String, password : String): Boolean {
         var isSuccessful : Boolean = true
@@ -84,6 +91,28 @@ class FireBaseWorker(val context : Context?) {
         return isSuccess
 
 
+    }
+
+    public fun fbSignIn(){
+        FacebookSdk.setApplicationId("321180588905861")
+        FacebookSdk.sdkInitialize(context)
+
+        val callBackManager = CallbackManager.Factory.create()
+
+        LoginManager.getInstance().registerCallback(callBackManager,object : FacebookCallback<LoginResult>{
+            override fun onSuccess(result: LoginResult?) {
+                Toast.makeText(context, "Facebook Sign In Okay ", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onCancel() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onError(error: FacebookException?) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
 

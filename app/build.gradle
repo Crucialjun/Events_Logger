@@ -49,5 +49,9 @@ dependencies {
     //Circle Indicators
     implementation 'me.relex:circleindicator:1.2.1@aar'
 
+    //Facebook Sign in
+    implementation 'com.facebook.android:facebook-login:5.15.3'
+
+
 
 }
