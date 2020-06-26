@@ -1,21 +1,26 @@
 package com.example.eventslogger
 
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import java.lang.Exception
 
 class FireBaseWorker(val context : Context?) {
     public val mAuth : FirebaseAuth = FirebaseAuth.getInstance()
     private var userId : String = ""
-    lateinit var  userReference : DatabaseReference
+    private lateinit var  userReference : DatabaseReference
+    val RC_SIGN_IN: Int = 1
 
-    public fun signup(email:String,password : String): Boolean {
-        var isSuccesful : Boolean = true
+    public fun signUp(email:String, password : String): Boolean {
+        var isSuccessful : Boolean = true
 
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -30,32 +35,55 @@ class FireBaseWorker(val context : Context?) {
 
                         }else{
                             Toast.makeText(context,"Database Not Updated",Toast.LENGTH_LONG).show()
-                            isSuccesful = false
+                            isSuccessful = false
                         }
                     }
 
 
                 } else {
-                    Toast.makeText(context, "Sign up unSuccesfull because of ${it.exception}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Sign up unSuccessful because of ${it.exception}", Toast.LENGTH_LONG).show()
                 }
             }
 
-        return isSuccesful
+        return isSuccessful
 
     }
 
     public fun signIn(email:String, password:String): Boolean {
-        var isSuccesful : Boolean = true
+        var isSuccess : Boolean = true
 
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
-            isSuccesful = it.isSuccessful
+            isSuccess = it.isSuccessful
         }
 
-        return isSuccesful
+        return isSuccess
     }
 
-    public fun googleSignIn(){
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken()
+    public fun googleSignIn(data: Intent?): Boolean {
+        var isSuccess : Boolean = true
+        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+
+            val credential = GoogleAuthProvider.getCredential(account!!.idToken, null)
+
+            mAuth.signInWithCredential(credential)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        isSuccess = true
+                    } else {
+                        isSuccess = false
+                        Toast.makeText(context, "Google sign in failed:(", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
+        } catch (exception: Exception) {
+            Log.d(ContentValues.TAG, "onActivityResult: $exception ")
+        }
+
+        return isSuccess
+
+
     }
 
 

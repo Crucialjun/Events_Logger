@@ -176,12 +176,12 @@
             android:padding="8dp"
             android:src="@drawable/fb"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_sign_up"
+            app:layout_constraintEnd_toStartOf="@+id/button_google_sign_up"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/button_sign_up"
+            android:id="@+id/button_google_sign_up"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

@@ -6,16 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
-import androidx.navigation.findNavController
-import com.google.android.material.textfield.TextInputEditText
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 
 class SignUp : Fragment() {
     private var email : String = ""
     private var password : String = ""
+    val RC_SIGN_IN: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class SignUp : Fragment() {
         button_signUp.setOnClickListener {
             val email = sign_up_username.text.toString()
             val password = sign_up_password.text.toString()
-            val successful = FireBaseWorker(context).signup(email, password)
+            val successful = FireBaseWorker(context).signUp(email, password)
             if(successful){
                 Toast.makeText(context, "Sign Up Complete", Toast.LENGTH_SHORT).show()
                 val intent = Intent (activity,MainActivity::class.java)
@@ -51,6 +51,28 @@ class SignUp : Fragment() {
             } else{
                 Toast.makeText(context, "Sign Up InComplete", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        button_google_sign_up.setOnClickListener {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(R.string.default_web_client_id.toString()).requestEmail().build()
+            val mGoogleSignInClient = GoogleSignIn.getClient(requireContext(),gso)
+            val signInIntent = mGoogleSignInClient.signInIntent
+            startActivityForResult(signInIntent,RC_SIGN_IN)
+    }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+
+            FireBaseWorker(context).googleSignIn(data)
+            Toast.makeText(context, "Sign Up Complete", Toast.LENGTH_SHORT).show()
+            val intent = Intent(activity, MainActivity::class.java)
+            requireActivity().startActivity(intent)
+            requireActivity().finish()
+        }else{
+            Toast.makeText(context, "The request code recieved is $requestCode", Toast.LENGTH_SHORT).show()
         }
     }
 }
