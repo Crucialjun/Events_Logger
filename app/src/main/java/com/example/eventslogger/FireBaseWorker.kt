@@ -16,19 +16,17 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.lang.Exception
 import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 
 
 class FireBaseWorker(val context : Context?) {
-    public val mAuth : FirebaseAuth = FirebaseAuth.getInstance()
+    val mAuth : FirebaseAuth = FirebaseAuth.getInstance()
     private var userId : String = ""
     private lateinit var  userReference : DatabaseReference
+    private var isSuccessful : Boolean = false
 
-    public fun signUp(email:String, password : String): Boolean {
-        var isSuccessful : Boolean = true
-
+    fun signUp(email:String, password : String): Boolean {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
                     userId = mAuth.currentUser!!.uid
@@ -38,11 +36,11 @@ class FireBaseWorker(val context : Context?) {
                     val userHash = HashMap<String, Any>()
                     userHash["uid"] = userId
                     userReference.updateChildren(userHash).addOnCompleteListener { task ->
-                        if(task.isSuccessful){
-
+                        isSuccessful = if(task.isSuccessful){
+                            true
                         }else{
                             Toast.makeText(context,"Database Not Updated",Toast.LENGTH_LONG).show()
-                            isSuccessful = false
+                            false
                         }
                     }
 
@@ -56,18 +54,15 @@ class FireBaseWorker(val context : Context?) {
 
     }
 
-    public fun signIn(email:String, password:String): Boolean {
-        var isSuccess : Boolean = true
-
+    fun signIn(email:String, password:String): Boolean {
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
-            isSuccess = it.isSuccessful
+            isSuccessful = it.isSuccessful
         }
 
-        return isSuccess
+        return isSuccessful
     }
 
     public fun googleSignIn(data: Intent?): Boolean {
-        var isSuccess : Boolean = true
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
         try {
             val account = task.getResult(ApiException::class.java)
@@ -77,9 +72,9 @@ class FireBaseWorker(val context : Context?) {
             mAuth.signInWithCredential(credential)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        isSuccess = true
+                        isSuccessful = true
                     } else {
-                        isSuccess = false
+                        isSuccessful = false
                         Toast.makeText(context, "Google sign in failed:(", Toast.LENGTH_LONG)
                             .show()
                     }
@@ -88,7 +83,7 @@ class FireBaseWorker(val context : Context?) {
             Log.d(ContentValues.TAG, "onActivityResult: $exception ")
         }
 
-        return isSuccess
+        return isSuccessful
 
 
     }
