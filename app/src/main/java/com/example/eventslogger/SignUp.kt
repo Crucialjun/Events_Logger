@@ -7,10 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.facebook.AccessToken
 import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FacebookAuthProvider
 import kotlinx.android.synthetic.main.fragment_sign_up.*
+import java.util.*
 
 
 class SignUp : Fragment() {
@@ -61,13 +67,28 @@ class SignUp : Fragment() {
             startActivityForResult(signInIntent,RC_SIGN_IN)
     }
 
-        button_fb_sign_up.setOnClickListener {
-            FireBaseWorker(context).fbSignIn()
-        }
+        val callBackManager = CallbackManager.Factory.create()
+
+        button_fb_sign_up.setPermissions(listOf("email","public_profile"))
+        button_fb_sign_up.registerCallback(callBackManager,object : FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult?) {
+                handleFacebookAccessToken(result!!.accessToken)
+            }
+
+            override fun onCancel() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onError(error: FacebookException?) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        FireBaseWorker(context).callBackManager.onActivityResult(requestCode,resultCode,data)
 
         if (requestCode == RC_SIGN_IN) {
 
@@ -77,7 +98,19 @@ class SignUp : Fragment() {
             requireActivity().startActivity(intent)
             requireActivity().finish()
         }else{
-            Toast.makeText(context, "The request code recieved is $requestCode", Toast.LENGTH_SHORT).show()
+
         }
+
     }
+
+    private fun handleFacebookAccessToken(accessToken: AccessToken?) {
+        val credential = FacebookAuthProvider.getCredential(accessToken!!.token)
+        mAuth.signInWithCredential(credential).addOnCompleteListener {
+            if(it.isSuccessful){
+                val user = mAuth.currentUser
+                isSuccessful = true
+            }else{
+                Toast.makeText(context, "Facebook Login Unsucceful", Toast.LENGTH_SHORT).show()
+            }
+        }
 }
