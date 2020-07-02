@@ -7,27 +7,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
+import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_sign_up.*
-import java.util.*
 
 
 class SignUp : Fragment() {
     private var email : String = ""
     private var password : String = ""
     val RC_SIGN_IN: Int = 1
-    private  var callBackManager  = CallbackManager.Factory.create()
+    private  val callBackManager  = CallbackManager.Factory.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FacebookSdk.sdkInitialize(context)
+
 
 
     }
@@ -39,15 +37,12 @@ class SignUp : Fragment() {
         // Inflate the layout for this fragment
 
         val view =  inflater.inflate(R.layout.fragment_sign_up, container, false)
-
-
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
+        button_fb_sign_up.fragment = this
         button_signUp.setOnClickListener {
             val email = sign_up_username.text.toString()
             val password = sign_up_password.text.toString()
@@ -71,7 +66,7 @@ class SignUp : Fragment() {
 
 
 
-        button_fb_sign_up.setPermissions(listOf("email","public_profile"))
+        button_fb_sign_up.setPermissions("email","public_profile")
         button_fb_sign_up.registerCallback(callBackManager,object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult?) {
                 Toast.makeText(context, "Login result : $result", Toast.LENGTH_SHORT).show()
@@ -83,7 +78,8 @@ class SignUp : Fragment() {
             }
 
             override fun onError(error: FacebookException?) {
-                TODO("Not yet implemented")
+                Toast.makeText(context, "Login result : ${error.toString()}", Toast.LENGTH_SHORT).show()
+
             }
 
         })
@@ -107,15 +103,21 @@ class SignUp : Fragment() {
     }
 
     private fun handleFacebookAccessToken(accessToken: AccessToken?) {
-        val credential = FacebookAuthProvider.getCredential(accessToken!!.token)
-        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful) {
-                val intent = Intent(activity, MainActivity::class.java)
-                requireActivity().startActivity(intent)
-                requireActivity().finish()
-            } else {
-
+        val credential = accessToken?.token?.let { FacebookAuthProvider.getCredential(it) }
+        val auth = FirebaseAuth.getInstance()
+        if (credential != null) {
+            auth.signInWithCredential(credential).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Toast.makeText(context, "Sign Up Complete", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(activity, MainActivity::class.java)
+                    requireActivity().startActivity(intent)
+                    requireActivity().finish()
+                } else {
+                    Toast.makeText(context, "Sign Up Complete: Error is ${it.result}", Toast.LENGTH_SHORT).show()
+                }
             }
+        }else{
+            Toast.makeText(context, "Credential is null", Toast.LENGTH_SHORT).show()
         }
     }
 }
