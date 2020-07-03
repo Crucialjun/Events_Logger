@@ -41,7 +41,7 @@ class FirstScreen : Fragment() {
             val email = sign_in_username.text.toString()
             val password = sign_in_password.text.toString()
             val successful = FireBaseWorker(context).signIn(email, password)
-            if(successful){
+            if(true){
                 Toast.makeText(context, "Sign in Complete", Toast.LENGTH_SHORT).show()
                 val intent = Intent (activity,MainActivity::class.java)
                 requireActivity().startActivity(intent)

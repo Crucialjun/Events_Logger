@@ -16,18 +16,20 @@ import java.lang.Exception
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.FacebookAuthProvider
+import kotlin.properties.Delegates
 
 
 class FireBaseWorker(val context : Context?) {
-    val mAuth : FirebaseAuth = FirebaseAuth.getInstance()
-    val callBackManager = CallbackManager.Factory.create()
+    val  mAuth : FirebaseAuth = FirebaseAuth.getInstance()
     private var userId : String = ""
     private lateinit var  userReference : DatabaseReference
-    var isSuccessful : Boolean = false
+    var currentUser = mAuth.currentUser
+    
 
-    fun signUp(email:String, password : String): Boolean {
-            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+    fun signUp(email:String, password : String) {
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
+
                     userId = mAuth.currentUser!!.uid
                     userReference =
                         FirebaseDatabase.getInstance().reference.child("Users").child(userId)
@@ -35,11 +37,12 @@ class FireBaseWorker(val context : Context?) {
                     val userHash = HashMap<String, Any>()
                     userHash["uid"] = userId
                     userReference.updateChildren(userHash).addOnCompleteListener { task ->
-                        isSuccessful = if(task.isSuccessful){
-                            true
+                        if(task.isSuccessful){
+                            Toast.makeText(context,"Database Not Updated Successfully",Toast.LENGTH_LONG).show()
+
                         }else{
                             Toast.makeText(context,"Database Not Updated",Toast.LENGTH_LONG).show()
-                            false
+
                         }
                     }
 
@@ -47,18 +50,16 @@ class FireBaseWorker(val context : Context?) {
                 } else {
                     Toast.makeText(context, "Sign up unSuccessful because of ${it.exception}", Toast.LENGTH_LONG).show()
                 }
+            currentUser = mAuth.currentUser
             }
 
-        return isSuccessful
 
     }
 
-    fun signIn(email:String, password:String): Boolean {
+    fun signIn(email:String, password:String){
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
-            isSuccessful = it.isSuccessful
+           // isSuccessful = it.isSuccessful
         }
-
-        return isSuccessful
     }
 
     public fun googleSignIn(data: Intent?): Boolean {
@@ -71,9 +72,9 @@ class FireBaseWorker(val context : Context?) {
             mAuth.signInWithCredential(credential)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        isSuccessful = true
+                        //isSuccessful = true
                     } else {
-                        isSuccessful = false
+                       // isSuccessful = false
                         Toast.makeText(context, "Google sign in failed:(", Toast.LENGTH_LONG)
                             .show()
                     }
@@ -82,39 +83,29 @@ class FireBaseWorker(val context : Context?) {
             Log.d(ContentValues.TAG, "onActivityResult: $exception ")
         }
 
-        return isSuccessful
+        return true
 
 
     }
 
-    public fun fbSignIn(){
 
-        LoginManager.getInstance().registerCallback(callBackManager,object : FacebookCallback<LoginResult>{
-            override fun onSuccess(result: LoginResult?) {
-                handleFacebookAccessToken(result!!.accessToken)
+
+    public fun handleFacebookAccessToken(accessToken: AccessToken?) : Boolean {
+        val credential = accessToken?.token?.let { FacebookAuthProvider.getCredential(it) }
+        val auth = FirebaseAuth.getInstance()
+        if (credential != null) {
+            auth.signInWithCredential(credential).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    //isSuccessful = true
+                } else {
+                    Toast.makeText(context, "Sign Up Complete: Error is ${it.result}", Toast.LENGTH_SHORT).show()
+                    //isSuccessful = false
+                }
             }
-
-            override fun onCancel() {
-                TODO("Not yet implemented")
-            }
-
-            override fun onError(error: FacebookException?) {
-                TODO("Not yet implemented")
-            }
-
-        })
-    }
-
-    private fun handleFacebookAccessToken(accessToken: AccessToken?) {
-        val credential = FacebookAuthProvider.getCredential(accessToken!!.token)
-        mAuth.signInWithCredential(credential).addOnCompleteListener {
-            if(it.isSuccessful){
-                val user = mAuth.currentUser
-                isSuccessful = true
-            }else{
-                Toast.makeText(context, "Facebook Login Unsucceful", Toast.LENGTH_SHORT).show()
-            }
+        }else{
+            Toast.makeText(context, "Credential is null", Toast.LENGTH_SHORT).show()
         }
+        return false
     }
 
 
