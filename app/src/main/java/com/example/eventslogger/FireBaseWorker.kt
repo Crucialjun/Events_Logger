@@ -23,19 +23,22 @@ class FireBaseWorker(val context : Context?) {
     val  mAuth : FirebaseAuth = FirebaseAuth.getInstance()
     private var userId : String = ""
     private lateinit var  userReference : DatabaseReference
-    var currentUser = mAuth.currentUser
-    
+    var isSuccess : Boolean = false
 
     fun signUp(email:String, password : String) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
-
+                    this.isSuccess = true
                     userId = mAuth.currentUser!!.uid
-                    userReference =
-                        FirebaseDatabase.getInstance().reference.child("Users").child(userId)
+                    userReference = FirebaseDatabase
+                        .getInstance()
+                        .reference
+                        .child("Users")
+                        .child(userId)
 
                     val userHash = HashMap<String, Any>()
                     userHash["uid"] = userId
+                    userHash["email"] = mAuth.currentUser!!.email.toString()
                     userReference.updateChildren(userHash).addOnCompleteListener { task ->
                         if(task.isSuccessful){
                             Toast.makeText(context,"Database Not Updated Successfully",Toast.LENGTH_LONG).show()
@@ -46,11 +49,11 @@ class FireBaseWorker(val context : Context?) {
                         }
                     }
 
-
                 } else {
+                    this.isSuccess = false
                     Toast.makeText(context, "Sign up unSuccessful because of ${it.exception}", Toast.LENGTH_LONG).show()
                 }
-            currentUser = mAuth.currentUser
+
             }
 
 
