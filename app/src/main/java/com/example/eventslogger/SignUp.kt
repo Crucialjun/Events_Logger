@@ -1,7 +1,9 @@
 package com.example.eventslogger
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +13,14 @@ import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_sign_up.*
+import java.lang.Exception
 
 
 class SignUp : Fragment() {
@@ -40,9 +46,7 @@ class SignUp : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        button_fb_sign_up.fragment = this
 
-        val fireBaseWorker = FireBaseWorker(context).isSuccess
 
         button_signUp.setOnClickListener {
             val email = sign_up_username.text.toString()
@@ -86,16 +90,15 @@ class SignUp : Fragment() {
             startActivityForResult(signInIntent,RC_SIGN_IN)
     }
 
+        button_fb_sign_up.fragment = this
+
 
 
         button_fb_sign_up.setPermissions("email","public_profile")
         button_fb_sign_up.registerCallback(callBackManager,object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult?) {
                 Toast.makeText(context, "Login result : $result", Toast.LENGTH_SHORT).show()
-                val success : Boolean = FireBaseWorker(context).handleFacebookAccessToken(result!!.accessToken)
-                if(success){
-                    updateUI()
-                }
+                handleFacebookAccessToken(result!!.accessToken)
             }
 
             override fun onCancel() {
@@ -115,10 +118,26 @@ class SignUp : Fragment() {
         callBackManager.onActivityResult(requestCode,resultCode,data)
 
         if (requestCode == RC_SIGN_IN) {
-            FireBaseWorker(context).googleSignIn(data)
-            updateUI()
-        }else{
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
 
+                val credential = GoogleAuthProvider.getCredential(account!!.idToken, null)
+
+                mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            updateUI()
+                        } else {
+                            // isSuccessful = false
+                            Toast.makeText(context, "Google sign in failed:(", Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    }
+            } catch (exception: Exception) {
+                Log.d(ContentValues.TAG, "onActivityResult: $exception ")
+            }
+            updateUI()
         }
 
     }
@@ -127,6 +146,23 @@ class SignUp : Fragment() {
         val intent = Intent(activity, MainActivity::class.java)
         requireActivity().startActivity(intent)
         requireActivity().finish()
+    }
+
+    fun handleFacebookAccessToken(accessToken: AccessToken?)  {
+        val credential = accessToken?.token?.let { FacebookAuthProvider.getCredential(it) }
+        val auth = FirebaseAuth.getInstance()
+        if (credential != null) {
+            auth.signInWithCredential(credential).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    updateUI()
+                } else {
+                    Toast.makeText(context, "Sign Up Complete: Error is ${it.result}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }else{
+            Toast.makeText(context, "Credential is null", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
 }

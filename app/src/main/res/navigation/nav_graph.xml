@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/firstScreen"
-        android:name="com.example.eventslogger.FirstScreen"
+        android:name="com.example.eventslogger.SignIn"
         android:label="fragment_first_screen"
-        tools:layout="@layout/fragment_first_screen" >
+        tools:layout="@layout/fragment_sign_in" >
         <action
             android:id="@+id/action_firstScreen_to_signUp"
             app:destination="@id/signUp"
